@@ -998,7 +998,7 @@
     node-fetch "^2.6.7"
     universal-user-agent "^6.0.0"
 
-    "@octokit/rest@^18.0.6":
+"@octokit/rest@^18.0.6":
   version "18.12.0"
   dependencies:
     "@octokit/core" "^3.5.1"
@@ -1998,7 +1998,7 @@ depd@^2.0.0, depd@2.0.0:
 depd@~1.1.2:
   version "1.1.2"
 
-  deprecation@^2.0.0, deprecation@^2.3.1:
+deprecation@^2.0.0, deprecation@^2.3.1:
   version "2.3.1"
 
 destroy@1.2.0:
@@ -2999,7 +2999,7 @@ loader-utils@^2.0.0:
     emojis-list "^3.0.0"
     json5 "^2.1.2"
 
-    locate-path@^5.0.0:
+locate-path@^5.0.0:
   version "5.0.0"
   dependencies:
     p-locate "^4.1.0"
@@ -3998,7 +3998,7 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
-    scoped-regex@^2.0.0:
+scoped-regex@^2.0.0:
   version "2.1.0"
 
 select-hose@^2.0.0:
