@@ -1,38 +1,91 @@
-export interface IProductItem {
-	id: string;
-	description: string;
-	image: string;
-	title: string;
-	category: string;
-	price: number;
+//Продукт
+export interface IProduct {
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: ProductCategory;
+    price: number | null;
 }
 
-export interface IDeliveryForm {
-	payment: string;
-	address: string;
+//Категории продуктов
+export enum ProductCategory {
+    'софт-скил' = 'soft',
+    'другое' = 'other',
+    'хард-скил' = 'hard',
+    'дополнительное' = 'additional',
+    'кнопка' = 'кнопка'
 }
 
-export interface IContactsForm {
-	email: string;
-	phone: string;
+//Заказ
+export interface IOrder {
+    address: string;
+    phone: number;
+    payment: OrderPayment;
+    mail: string;
+    total: number | null;
+    items: IProduct[]
 }
 
-export interface IOrderForm extends IDeliveryForm, IContactsForm {
-	total: number;
-	items: string[];
+//Ошибки в форме
+export type FormErrors = {
+	email?: string;
+	phone?: string;
+	address?: string;
+	payment?: string;
 }
 
+//интерфейс для данных пользователя
+export interface IUserData {
+    adress: string;
+    email: string;
+    phone: string;
+    payment: string;
+    getUserData(): IUserData; //данные пользователя для заказа
+    checkUserInfoValidation(data: Record<keyof TContactInf, string>): boolean; //проверка корректности данных пользователя
+}
+
+//Результат заказа
 export interface IOrderResult {
-	id: string;
-	total: number;
+    id: string;
+    total: number | null;
 }
 
-export interface IAppState {
-	catalog: IProductItem[];
-	basket: IProductItem[];
-	preview: string | null;
-	order: IOrderForm | null;
-	loading: boolean;
+//интерфейс корзины товаров
+export interface IBasket {
+    basket: TBasket[];
+    resetBasket(): void; //очищение данных после успешного заказа
 }
 
-export type FormErrors = Partial<Record<keyof IOrderForm, string>>;
+//интерфейс открытой карточки товара для просмотра
+export interface IExploreCard {
+    items: IProduct[];
+    preview: string | null;
+}
+
+//интерфейс каталогa товаров
+export interface IListItem {
+    items: TMainCards[]; //массив карточек на главной странице
+    preview: string | null; //id открытой карточки
+    showOneItem(item: string): void; //открываем карточку для просмотра по id 
+    getItems(): IProduct[]; //получаем массив карточек с сервера
+    saveItems(): IProduct[]; //сохраняем массив карточек
+}
+
+// Отображение продукта на главной странице
+type TMainCards = Omit<IProduct, "description">
+
+//тип для отображения товара в корзине
+type TBasket = Pick<IProduct, 'id' | 'title' | 'price'>
+
+//тип для модалки способ оплаты и адрес
+type TPayment = Pick<IOrder, 'payment' | 'address'>
+
+//тип для модалки контактные данные 
+type TContactInf = Pick<IOrder, 'mail' | 'phone'>
+
+//выбор способа оплаты
+type OrderPayment = "online" | "cash"
+
+//тип открфтого модального окна 
+type AppStateModal = "card" | "basket" | "order"
