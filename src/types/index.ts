@@ -1,91 +1,60 @@
-//Продукт
+// Тип категории товара
+export type CatalogItemStatus = {
+	category: 'софт-скил' | 'хард-скил' | 'другое' | 'кнопка' | 'дополнительное';
+};
+
+// Интерфейс, описывающий карточку товара
 export interface IProduct {
-    id: string;
-    description: string;
-    image: string;
-    title: string;
-    category: ProductCategory;
-    price: number | null;
+	id: string; // Уникальный идентификатор товара
+	description: string; // Описание товара
+	image: string; // URL изображения товара
+	title: string; // Название товара
+	category: string; // Категория товара
+	price: number | null; //Цена товара
 }
 
-//Категории продуктов
-export enum ProductCategory {
-    'софт-скил' = 'soft',
-    'другое' = 'other',
-    'хард-скил' = 'hard',
-    'дополнительное' = 'additional',
-    'кнопка' = 'кнопка'
+// Интерфейс для класса ContactsForm
+export interface IOrderForm {
+	email: string; // Электронный адрес пользователя
+	phone: string; // Номер телефона пользователя
 }
 
-//Заказ
-export interface IOrder {
-    address: string;
-    phone: number;
-    payment: OrderPayment;
-    mail: string;
-    total: number | null;
-    items: IProduct[]
+// Интерфейс для класса Order
+export interface IOrderContact {
+	payment: string; // Способ оплаты
+	address: string; // Адрес доставки
 }
 
-//Ошибки в форме
-export type FormErrors = {
-	email?: string;
-	phone?: string;
-	address?: string;
-	payment?: string;
+// Интерфейс IOrder, расширяющий IOrderForm и IOrderContact
+export interface IOrder extends IOrderForm, IOrderContact {
+	total: number; // Общая сумма заказа
+	items: string[]; // Массив строк, представляющий идентификаторы или описания товаров, включенных в заказ
 }
 
-//интерфейс для данных пользователя
-export interface IUserData {
-    adress: string;
-    email: string;
-    phone: string;
-    payment: string;
-    getUserData(): IUserData; //данные пользователя для заказа
-    checkUserInfoValidation(data: Record<keyof TContactInf, string>): boolean; //проверка корректности данных пользователя
+// Интерфейс для создание заказа
+export interface IOrderAnswer {
+	total: number; // идентификатор заказа
 }
 
-//Результат заказа
-export interface IOrderResult {
-    id: string;
-    total: number | null;
+// Интерфейс для класса AppState
+export interface IAppState {
+	catalog: IProduct[]; // Массив товаров в корзине
+	basket: string[]; // Каталог товаров
+	order: IOrder; // Текущий заказ
 }
 
-//интерфейс корзины товаров
-export interface IBasket {
-    basket: TBasket[];
-    resetBasket(): void; //очищение данных после успешного заказа
+// Интерфейс для работы с API магазина
+export interface IStoreApi {
+	getProductList: () => Promise<IProduct[]>; // Получение списка всех продуктов, доступных в магазине
+	orderProduct: (value: IOrder) => Promise<IOrderAnswer>; // Отправка заказа на сервер
 }
 
-//интерфейс открытой карточки товара для просмотра
-export interface IExploreCard {
-    items: IProduct[];
-    preview: string | null;
+// Интерфейс для класса Page
+export interface IPage {
+	counter: HTMLElement; // Счетчик на странице
+	catalog: HTMLElement; //Каталог товаров или элементов
+	basket: HTMLElement; // Отображение корзины
 }
 
-//интерфейс каталогa товаров
-export interface IListItem {
-    items: TMainCards[]; //массив карточек на главной странице
-    preview: string | null; //id открытой карточки
-    showOneItem(item: string): void; //открываем карточку для просмотра по id 
-    getItems(): IProduct[]; //получаем массив карточек с сервера
-    saveItems(): IProduct[]; //сохраняем массив карточек
-}
-
-// Отображение продукта на главной странице
-type TMainCards = Omit<IProduct, "description">
-
-//тип для отображения товара в корзине
-type TBasket = Pick<IProduct, 'id' | 'title' | 'price'>
-
-//тип для модалки способ оплаты и адрес
-type TPayment = Pick<IOrder, 'payment' | 'address'>
-
-//тип для модалки контактные данные 
-type TContactInf = Pick<IOrder, 'mail' | 'phone'>
-
-//выбор способа оплаты
-type OrderPayment = "online" | "cash"
-
-//тип открфтого модального окна 
-type AppStateModal = "card" | "basket" | "order"
+//Тип **FormErrors**, который используется для представления ошибок формы
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
